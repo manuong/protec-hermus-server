@@ -38,7 +38,7 @@ userSchema.set('toJSON', {
 
     // esto no modifica lo que esta guardado en la base de datos
     delete returnedObject._id;
-    delete returnedObject._v;
+    delete returnedObject.__v;
     delete returnedObject.password;
   },
 });

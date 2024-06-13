@@ -1,18 +1,20 @@
-import dotenv from 'dotenv';
-// para variables de entorno del archivo .env
-dotenv.config();
+require('dotenv').config();
 
-import server from './src/server.js';
-import connectionDB from './src/db.js';
+const connectionDB = require('./src/db');
+const server = require('./src/server');
 
-const { PORT } = process.env;
+const PORT = process.env.PORT || 3000;
 
+// conenctar base de datos y despues levantar el servidor
 connectionDB
-  .then(
+  .then(() => {
+    console.log('>>> Database connected');
+  })
+  .then(() => {
     server.listen(PORT, () => {
       console.log(`server lisened on PORT ${PORT}`);
-    })
-  )
+    });
+  })
   .catch((error) => {
     console.error(error);
   });

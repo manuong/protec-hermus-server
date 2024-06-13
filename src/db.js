@@ -1,15 +1,8 @@
-import mongoose from 'mongoose';
-
-import dotenv from 'dotenv';
-// para variables de entorno del archivo .env
-dotenv.config();
+const mongoose = require('mongoose');
 
 const connectionString = process.env.MONGODB_URI;
 
-console.log(connectionString);
+// conexion a la base de datos
+const connectionDB = mongoose.connect(connectionString);
 
-const connectionDB = mongoose.connect(connectionString).then(() => {
-  console.log('>>> Database connected');
-});
-
-export default connectionDB;
+module.exports = connectionDB;

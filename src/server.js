@@ -1,5 +1,6 @@
-import express from 'express';
-import cors from 'cors';
+const express = require('express');
+const cors = require('cors');
+const routes = require('./routes');
 
 const server = express();
 
@@ -10,6 +11,6 @@ server.disable('x-powered-by');
 server.use(cors());
 
 // prefijo /api para rutas
-// server.use('/api');
+server.use('/api', routes);
 
-export default server;
+module.exports = server;

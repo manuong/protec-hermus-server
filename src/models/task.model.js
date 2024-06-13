@@ -5,10 +5,12 @@ const taskSchema = new mongoose.Schema(
     title: {
       type: String,
       trim: true,
+      require: true,
     },
-    discription: {
+    description: {
       type: String,
       trime: true,
+      require: true,
     },
     assigned: {
       type: mongoose.Schema.Types.ObjectId,
@@ -18,6 +20,10 @@ const taskSchema = new mongoose.Schema(
       type: String,
       enum: ['pending', 'in progress', 'completed', 'approved'],
       default: 'pending',
+    },
+    comment: {
+      type: String,
+      trim: true,
     },
   },
   {
@@ -39,6 +45,6 @@ taskSchema.set('toJSON', {
 });
 
 // se define el esquema y se guarda en constante para exportarla y utilizarla
-const Task = mongoose.model('Task', userSchema);
+const Task = mongoose.model('Task', taskSchema);
 
 module.exports = Task;

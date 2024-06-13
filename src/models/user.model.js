@@ -7,7 +7,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
-    email: {
+    username: {
       type: String,
       require: true,
       trim: true,
@@ -21,7 +21,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       require: true,
       trim: true,
-      enum: ['administrador, tecnico, cliente'],
+      enum: ['administrador, técnico, área'],
     },
   },
   {

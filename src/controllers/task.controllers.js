@@ -32,4 +32,25 @@ const postTaskController = async (req, res, next) => {
   }
 };
 
-module.exports = { getTasksController, postTaskController };
+const putTaskController = async (req, res, next) => {
+  try {
+    const { assigned, status, comment } = req.body;
+    const { taskId } = req.params;
+
+    const newTaskInfo = {
+      assigned,
+      status,
+      comment,
+    };
+
+    const taskUpdate = await Task.findOneAndUpdate({ _id: taskId }, newTaskInfo, { new: true });
+
+    if (!taskUpdate) throw new NotFoundError('Terea no encontrada');
+
+    res.status(200).json({ message: 'Tarea actualizada con exito' });
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = { getTasksController, postTaskController, putTaskController };

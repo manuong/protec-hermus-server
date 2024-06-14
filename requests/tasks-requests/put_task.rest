@@ -1,0 +1,8 @@
+PUT http://localhost:3000/api/task/666b47764bf2cea15478573b
+Content-Type: application/json
+
+{
+    "title": "Este es un titulo de prueba",
+    "description": "esta es una descripcion de prueba",
+    "status":"in progress",
+}

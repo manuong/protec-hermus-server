@@ -6,6 +6,7 @@ const userSchema = new mongoose.Schema(
     name: {
       type: String,
       trim: true,
+      require: true,
     },
     username: {
       type: String,
@@ -21,7 +22,12 @@ const userSchema = new mongoose.Schema(
       type: String,
       require: true,
       trim: true,
-      enum: ['administrador, técnico, área'],
+      enum: ['administrador', 'técnico', 'área'],
+    },
+    // implementando un borrado logico
+    removed: {
+      type: Boolean,
+      default: false,
     },
   },
   {
@@ -40,6 +46,7 @@ userSchema.set('toJSON', {
     delete returnedObject._id;
     delete returnedObject.__v;
     delete returnedObject.password;
+    delete returnedObject.removed;
   },
 });
 

@@ -1,7 +1,9 @@
 const { z } = require('zod');
 
 const userSchema = z.object({
-  name: z.string(),
+  name: z.string({
+    required_error: 'Es requerido definir un nombre',
+  }),
   username: z.string({
     required_error: 'Nombre de usuario es un dato requerido',
   }),

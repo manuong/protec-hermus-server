@@ -25,6 +25,11 @@ const taskSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
+    // implementando un borrado logico
+    removed: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,
@@ -41,6 +46,7 @@ taskSchema.set('toJSON', {
     // esto no modifica lo que esta guardado en la base de datos
     delete returnedObject._id;
     delete returnedObject.__v;
+    delete returnedObject.removed;
   },
 });
 

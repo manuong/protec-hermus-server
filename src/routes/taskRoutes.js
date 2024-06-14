@@ -2,6 +2,7 @@ const {
   getTasksController,
   postTaskController,
   putTaskController,
+  deleteTaskController,
 } = require('../controllers/task.controllers');
 
 const validateSchema = require('../middlewares/validateSchema.middleware');
@@ -14,6 +15,6 @@ taskRoutes.post('/task', validateSchema(taskSchema), postTaskController);
 
 taskRoutes.put('/task/:taskId', validateSchema(taskSchema), putTaskController);
 
-// taskRoutes.delete('/task');
+taskRoutes.delete('/task/:taskId', deleteTaskController);
 
 module.exports = taskRoutes;

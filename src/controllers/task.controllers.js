@@ -3,9 +3,10 @@ const Task = require('../models/task.model');
 
 const getTasksController = async (req, res, next) => {
   try {
-    const tasksData = await Task.find(req.query);
+    // removed: false para solo devolver las tareas no eliminadas
+    const tasksData = await Task.find({ ...req.query, removed: false });
 
-    if (!tasksData) throw new NotFoundError('Tareas no encontradas');
+    if (tasksData.length < 1) throw new NotFoundError('Sin ningun registro');
 
     res.status(200).json(tasksData);
   } catch (error) {
@@ -53,4 +54,22 @@ const putTaskController = async (req, res, next) => {
   }
 };
 
-module.exports = { getTasksController, postTaskController, putTaskController };
+const deleteTaskController = async (req, res, next) => {
+  try {
+    const { taskId } = req.params;
+
+    const deletedTask = await Task.findOneAndUpdate(
+      { _id: taskId, removed: false },
+      { removed: true },
+      { new: true }
+    );
+
+    if (!deletedTask) throw new NotFoundError('Tarea no encontrada o ya eliminada');
+
+    res.status(200).json({ message: 'Tarea eliminada con exito' });
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = { getTasksController, postTaskController, putTaskController, deleteTaskController };

@@ -1,9 +1,15 @@
 const userRoutes = require('express').Router();
 
-userRoutes.get('/user');
+const { getUsersController, registerUserController } = require('../controllers/user.controllers');
+const validateSchema = require('../middlewares/validateSchema.middleware');
+const userSchema = require('../schemas/user.schema');
 
-userRoutes.post('/user');
+userRoutes.get('/user', getUsersController);
 
-userRoutes.put('/user');
+userRoutes.post('/user', validateSchema(userSchema), registerUserController);
 
-userRoutes.delete('/user');
+// userRoutes.put('/user');
+
+// userRoutes.delete('/user');
+
+module.exports = userRoutes;

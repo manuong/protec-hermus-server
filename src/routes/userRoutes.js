@@ -2,11 +2,12 @@ const userRoutes = require('express').Router();
 
 const { getUsersController, registerUserController } = require('../controllers/user.controllers');
 const validateSchema = require('../middlewares/validateSchema.middleware');
+const validateToken = require('../middlewares/validateToken.middleware');
 const userSchema = require('../schemas/user.schema');
 
-userRoutes.get('/user', getUsersController);
+userRoutes.get('/user', validateToken, getUsersController);
 
-userRoutes.post('/user', validateSchema(userSchema), registerUserController);
+userRoutes.post('/user', validateToken, validateSchema(userSchema), registerUserController);
 
 // userRoutes.put('/user');
 

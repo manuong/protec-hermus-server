@@ -14,4 +14,11 @@ class BadRequestError extends Error {
   }
 }
 
-module.exports = { NotFoundError, BadRequestError };
+class AuthError extends Error {
+  constructor(message) {
+    super(message);
+    this.name = ERROR_NAMES.AUTH_ERROR;
+  }
+}
+
+module.exports = { NotFoundError, BadRequestError, AuthError };

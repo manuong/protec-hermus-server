@@ -1,5 +1,6 @@
 const { NotFoundError } = require('../errors');
 const User = require('../models/user.model');
+const bcrypt = require('bcryptjs');
 
 const getUsersController = async (req, res, next) => {
   try {
@@ -17,10 +18,12 @@ const registerUserController = async (req, res, next) => {
   try {
     const { name, username, password, typeOfUser } = req.body;
 
+    const passwordHash = await bcrypt.hash(password, 9);
+
     const newUser = new User({
       name,
       username,
-      password,
+      password: passwordHash,
       typeOfUser,
     });
 

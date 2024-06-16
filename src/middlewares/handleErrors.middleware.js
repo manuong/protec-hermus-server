@@ -11,6 +11,10 @@ const handleErrors = (error, req, res, next) => {
     return res.status(400).json({ error: errorArray });
   }
 
+  if (error.name === ERROR_NAMES.AUTH_ERROR) {
+    return res.status(401).json({ error: errorArray });
+  }
+
   // errores con los parametros definidos en los modelos
   if (error.name === 'MongoServerError') {
     if (error.code === 11000) return res.status(409).json({ error: ['Usuario ya registrado'] });

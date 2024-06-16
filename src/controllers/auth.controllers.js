@@ -18,6 +18,7 @@ const loginController = async (req, res, next) => {
       id: user._id,
       name: user.name,
       username: user.username,
+      typeOfUser: user.typeOfUser,
     };
 
     const token = await createAccessToken(userForToken);

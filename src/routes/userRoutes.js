@@ -7,7 +7,7 @@ const userSchema = require('../schemas/user.schema');
 
 userRoutes.get('/user', validateToken, getUsersController);
 
-userRoutes.post('/user', validateToken, validateSchema(userSchema), registerUserController);
+userRoutes.post('/user', validateSchema(userSchema), registerUserController);
 
 // userRoutes.put('/user');
 

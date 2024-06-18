@@ -1,10 +1,32 @@
 const { NotFoundError, BadRequestError } = require('../errors');
 const Task = require('../models/task.model');
+const TYPE_OF_USERS = require('../constants/typeOfUser');
 
 const getTasksController = async (req, res, next) => {
   try {
-    // removed: false para solo devolver las tareas no eliminadas
-    const tasksData = await Task.find({ ...req.query, removed: false });
+    // que usuario esta haciendo la peticion
+    const { typeOfUser } = req.user;
+    const { id } = req.user;
+
+    let tasksData = null;
+
+    // filtrar dependiendo el usuario
+    if (typeOfUser === TYPE_OF_USERS.TEC) {
+      tasksData = await Task.find({ ...req.query, removed: false, assigned: id })
+        .sort({ updatedAt: -1 }) // ordenar para mostar las tareas mas recientes primero
+        .populate('assigned');
+    }
+
+    if (typeOfUser === TYPE_OF_USERS.AREA) {
+      tasksData = await Task.find({ ...req.query, removed: false, area: id })
+        .sort({ updatedAt: -1 }) // ordenar para mostar las tareas mas recientes primero
+        .populate('area');
+    }
+
+    if (typeOfUser === TYPE_OF_USERS.ADMIN) {
+      // para el administrador se envian todas las tareas
+      tasksData = await Task.find({ ...req.query, removed: false }).sort({ updatedAt: -1 });
+    }
 
     if (tasksData.length < 1) throw new NotFoundError('Sin ningun registro');
 
@@ -17,12 +39,16 @@ const getTasksController = async (req, res, next) => {
 const postTaskController = async (req, res, next) => {
   const { title, description } = req.body;
 
+  // que usuario creo la tarea
+  const { id } = req.user;
+
   try {
     if (!title || !description) throw new BadRequestError('Faltan datos o los datos son incorrectos');
 
     const newTask = new Task({
       title,
       description,
+      area: id,
     });
 
     await newTask.save();

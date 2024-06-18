@@ -12,7 +12,13 @@ const taskSchema = new mongoose.Schema(
       trime: true,
       require: true,
     },
+    // relacion con tabla user para asignacion de tecnico
     assigned: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+    },
+    // relacion con tabla user para quien emite la tarea
+    area: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
     },

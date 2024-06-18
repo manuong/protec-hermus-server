@@ -8,27 +8,33 @@ const getTasksController = async (req, res, next) => {
     const { typeOfUser } = req.user;
     const { id } = req.user;
 
-    let tasksData = null;
+    // filtrar dependiendo el usuario
+    let filter = { ...req.query, removed: false, area: id }; // area por defecto
+    if (typeOfUser === TYPE_OF_USERS.TEC) filter = { ...req.query, removed: false, assigned: id };
+    if (typeOfUser === TYPE_OF_USERS.ADMIN) filter = { ...req.query, removed: false }; // para el administrador se envian todas las tareas
+
+    const tasksData = await Task.find(filter)
+      .sort({ updatedAt: -1 }) // ordenar para mostar las tareas mas recientes primero
+      .populate('assigned')
+      .populate('area');
 
     // filtrar dependiendo el usuario
-    if (typeOfUser === TYPE_OF_USERS.TEC) {
-      tasksData = await Task.find({ ...req.query, removed: false, assigned: id })
-        .sort({ updatedAt: -1 }) // ordenar para mostar las tareas mas recientes primero
-        .populate('assigned');
-    }
+    // if (typeOfUser === TYPE_OF_USERS.TEC) {
+    //   tasksData = await Task.find({ ...req.query, removed: false, assigned: id })
+    //     .sort({ updatedAt: -1 }) // ordenar para mostar las tareas mas recientes primero
+    //     .populate('assigned');
+    // }
 
-    if (typeOfUser === TYPE_OF_USERS.AREA) {
-      tasksData = await Task.find({ ...req.query, removed: false, area: id })
-        .sort({ updatedAt: -1 }) // ordenar para mostar las tareas mas recientes primero
-        .populate('area');
-    }
+    // if (typeOfUser === TYPE_OF_USERS.AREA) {
+    //   tasksData = await Task.find({ ...req.query, removed: false, area: id })
+    //     .sort({ updatedAt: -1 }) // ordenar para mostar las tareas mas recientes primero
+    //     .populate('area');
+    // }
 
-    if (typeOfUser === TYPE_OF_USERS.ADMIN) {
-      // para el administrador se envian todas las tareas
-      tasksData = await Task.find({ ...req.query, removed: false }).sort({ updatedAt: -1 });
-    }
-
-    if (tasksData.length < 1) throw new NotFoundError('Sin ningun registro');
+    // if (typeOfUser === TYPE_OF_USERS.ADMIN) {
+    //   // para el administrador se envian todas las tareas
+    //   tasksData = await Task.find({ ...req.query, removed: false }).sort({ updatedAt: -1 });
+    // }
 
     res.status(200).json(tasksData);
   } catch (error) {

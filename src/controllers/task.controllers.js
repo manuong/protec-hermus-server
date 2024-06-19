@@ -2,6 +2,19 @@ const { NotFoundError, BadRequestError } = require('../errors');
 const Task = require('../models/task.model');
 const TYPE_OF_USERS = require('../constants/typeOfUser');
 
+const getTaskDetailController = async (req, res, next) => {
+  try {
+    const { taskId } = req.params;
+
+    const task = await Task.findById(taskId);
+    if (!task) throw new NotFoundError('Terea no encontrada');
+
+    res.status(200).json(task);
+  } catch (error) {
+    next(error);
+  }
+};
+
 const getTasksController = async (req, res, next) => {
   try {
     // que usuario esta haciendo la peticion
@@ -9,9 +22,9 @@ const getTasksController = async (req, res, next) => {
     const { id } = req.user;
 
     // filtrar dependiendo el usuario
-    let filter = { ...req.query, removed: false, area: id }; // area por defecto
-    if (typeOfUser === TYPE_OF_USERS.TEC) filter = { ...req.query, removed: false, assigned: id };
-    if (typeOfUser === TYPE_OF_USERS.ADMIN) filter = { ...req.query, removed: false }; // para el administrador se envian todas las tareas
+    let filter = { ...req.query, removed: false }; // para el administrador se envian todas las tareas
+    if (typeOfUser === TYPE_OF_USERS.AREA) filter = { ...filter, area: id };
+    if (typeOfUser === TYPE_OF_USERS.TEC) filter = { ...filter, assigned: id };
 
     const tasksData = await Task.find(filter)
       .sort({ updatedAt: -1 }) // ordenar para mostar las tareas mas recientes primero
@@ -104,4 +117,10 @@ const deleteTaskController = async (req, res, next) => {
   }
 };
 
-module.exports = { getTasksController, postTaskController, putTaskController, deleteTaskController };
+module.exports = {
+  getTasksController,
+  postTaskController,
+  putTaskController,
+  deleteTaskController,
+  getTaskDetailController,
+};

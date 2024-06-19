@@ -1,12 +1,14 @@
-const { NotFoundError } = require('../errors');
+const TYPE_OF_USERS = require('../constants/typeOfUser');
+const { AuthError } = require('../errors');
 const User = require('../models/user.model');
 const bcrypt = require('bcryptjs');
 
 const getUsersController = async (req, res, next) => {
   try {
-    const dataUsers = await User.find(req.query);
+    const { typeOfUser } = req.user;
+    if (typeOfUser !== TYPE_OF_USERS.ADMIN) throw new AuthError('Sin permiso para acceder');
 
-    if (dataUsers.length < 1) throw new NotFoundError('Sin ningun registro');
+    const dataUsers = await User.find(req.query);
 
     res.status(200).json(dataUsers);
   } catch (error) {

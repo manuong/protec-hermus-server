@@ -1,17 +1,24 @@
-const { NotFoundError, BadRequestError } = require('../errors');
+// modelo
 const Task = require('../models/task.model');
+
+// errores
+const { NotFoundError, BadRequestError } = require('../errors');
+
+// contantes
 const TYPE_OF_USERS = require('../constants/typeOfUser');
 
 const getTaskDetailController = async (req, res, next) => {
   try {
+    // se extrae el id de la tarea para busqueda
     const { taskId } = req.params;
 
+    // se busca la tarea con ese id
     const task = await Task.findById(taskId);
     if (!task) throw new NotFoundError('Terea no encontrada');
 
     res.status(200).json(task);
   } catch (error) {
-    next(error);
+    next(error); // se envía a middleware que maneja los errores
   }
 };
 
@@ -28,34 +35,17 @@ const getTasksController = async (req, res, next) => {
 
     const tasksData = await Task.find(filter)
       .sort({ updatedAt: -1 }) // ordenar para mostar las tareas mas recientes primero
-      .populate('assigned')
+      .populate('assigned') // para incluir la info de usuario en la respuesta
       .populate('area');
-
-    // filtrar dependiendo el usuario
-    // if (typeOfUser === TYPE_OF_USERS.TEC) {
-    //   tasksData = await Task.find({ ...req.query, removed: false, assigned: id })
-    //     .sort({ updatedAt: -1 }) // ordenar para mostar las tareas mas recientes primero
-    //     .populate('assigned');
-    // }
-
-    // if (typeOfUser === TYPE_OF_USERS.AREA) {
-    //   tasksData = await Task.find({ ...req.query, removed: false, area: id })
-    //     .sort({ updatedAt: -1 }) // ordenar para mostar las tareas mas recientes primero
-    //     .populate('area');
-    // }
-
-    // if (typeOfUser === TYPE_OF_USERS.ADMIN) {
-    //   // para el administrador se envian todas las tareas
-    //   tasksData = await Task.find({ ...req.query, removed: false }).sort({ updatedAt: -1 });
-    // }
 
     res.status(200).json(tasksData);
   } catch (error) {
-    next(error);
+    next(error); // se envía a middleware que maneja los errores
   }
 };
 
 const postTaskController = async (req, res, next) => {
+  // se extrae la info de la tarea para crear tarea
   const { title, description } = req.body;
 
   // que usuario creo la tarea
@@ -64,6 +54,7 @@ const postTaskController = async (req, res, next) => {
   try {
     if (!title || !description) throw new BadRequestError('Faltan datos o los datos son incorrectos');
 
+    // se crea la instancia para la nueva tarea
     const newTask = new Task({
       title,
       description,
@@ -74,13 +65,15 @@ const postTaskController = async (req, res, next) => {
 
     res.status(201).json({ message: 'Tarea guardada con exito' });
   } catch (error) {
-    next(error);
+    next(error); // se envía a middleware que maneja los errores
   }
 };
 
 const putTaskController = async (req, res, next) => {
   try {
+    // se extrae la info de la tarea para actualizarla
     const { assigned, status, comment } = req.body;
+    // que tarea se va actualizar
     const { taskId } = req.params;
 
     const newTaskInfo = {
@@ -95,12 +88,13 @@ const putTaskController = async (req, res, next) => {
 
     res.status(200).json({ message: 'Tarea actualizada con exito' });
   } catch (error) {
-    next(error);
+    next(error); // se envía a middleware que maneja los errores
   }
 };
 
 const deleteTaskController = async (req, res, next) => {
   try {
+    // que tarea se va a eliminar
     const { taskId } = req.params;
 
     const deletedTask = await Task.findOneAndUpdate(
@@ -113,7 +107,7 @@ const deleteTaskController = async (req, res, next) => {
 
     res.status(200).json({ message: 'Tarea eliminada con exito' });
   } catch (error) {
-    next(error);
+    next(error); // se envía a middleware que maneja los errores
   }
 };
 

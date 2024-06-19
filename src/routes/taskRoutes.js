@@ -1,3 +1,14 @@
+// librerías
+const taskRoutes = require('express').Router();
+
+// middlewares
+const validateSchema = require('../middlewares/validateSchema.middleware');
+const validateToken = require('../middlewares/validateToken.middleware');
+
+// esquemas
+const taskSchema = require('../schemas/task.schema');
+
+// controladores
 const {
   getTasksController,
   postTaskController,
@@ -5,11 +16,6 @@ const {
   deleteTaskController,
   getTaskDetailController,
 } = require('../controllers/task.controllers');
-
-const validateSchema = require('../middlewares/validateSchema.middleware');
-const validateToken = require('../middlewares/validateToken.middleware');
-const taskSchema = require('../schemas/task.schema');
-const taskRoutes = require('express').Router();
 
 taskRoutes.get('/task', validateToken, getTasksController);
 

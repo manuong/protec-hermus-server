@@ -1,3 +1,4 @@
+// librerías
 const mongoose = require('mongoose');
 
 // se define el esquema de "usuarios"

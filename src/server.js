@@ -1,8 +1,13 @@
+// librerías
 const express = require('express');
 const cors = require('cors');
-const routes = require('./routes');
-const handleErrors = require('./middlewares/handleErrors.middleware');
 const morgan = require('morgan');
+
+// middlewares
+const handleErrors = require('./middlewares/handleErrors.middleware');
+
+// rutas
+const routes = require('./routes');
 
 const server = express();
 

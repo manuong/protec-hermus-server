@@ -1,5 +1,7 @@
+// librerías
 const { z } = require('zod');
 
+// Definiendo esquema requerido para guardar en la base de datos
 const userSchema = z.object({
   name: z.string({
     required_error: 'Es requerido definir un nombre',

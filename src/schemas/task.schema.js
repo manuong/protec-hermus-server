@@ -1,5 +1,7 @@
+// librerías
 const { z } = require('zod');
 
+// definiendo esquema requerido para guardar en la base de datos
 const taskSchema = z.object({
   title: z
     .string({

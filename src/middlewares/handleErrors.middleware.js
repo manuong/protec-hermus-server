@@ -17,7 +17,7 @@ const handleErrors = (error, req, res, next) => {
 
   // errores con los parametros definidos en los modelos
   if (error.name === 'MongoServerError') {
-    if (error.code === 11000) return res.status(409).json({ error: ['Usuario ya registrado'] });
+    if (error.code === 11000) return res.status(409).json({ error: ['Usuario ya registrado'] }); // codigo para usuarios repetidos
   }
 
   // errores de validacion de la libreria "zod" que estamos utilizando
